@@ -13,10 +13,10 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Capture full Canucks screenshot
+      - name: Capture full Canucks screenshot with debug
         run: |
-          curl -v -o banner.png "https://shot.screenshotapi.net/screenshot?token=${{ secrets.SCREENSHOT_API_KEY }}&url=https://www.nhl.com/canucks/&width=1920&height=1080&output=image"file banner.png
-
+          curl -v -o banner.png "https://shot.screenshotapi.net/screenshot?token=${{ secrets.SCREENSHOT_API_KEY }}&url=https://www.nhl.com/canucks/&width=1920&height=1080&output=image"
+          file banner.png
 
       - name: Install ImageMagick
         run: sudo apt-get update && sudo apt-get install -y imagemagick
@@ -33,4 +33,3 @@ jobs:
           git add banner.png
           git commit -m "Update banner" || echo "No changes to commit"
           git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/thegoalie1/canucks-banner.git HEAD:main
-
