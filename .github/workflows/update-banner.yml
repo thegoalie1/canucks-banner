@@ -15,7 +15,8 @@ jobs:
 
       - name: Capture full Canucks screenshot
         run: |
-          curl -o banner.png "https://shot.screenshotapi.net/screenshot?token=${{ secrets.SCREENSHOT_API_KEY }}&url=https://www.nhl.com/canucks/&width=1920&height=1080&output=image"
+          curl -v -o banner.png "https://shot.screenshotapi.net/screenshot?token=${{ secrets.SCREENSHOT_API_KEY }}&url=https://www.nhl.com/canucks/&width=1920&height=1080&output=image"file banner.png
+
 
       - name: Install ImageMagick
         run: sudo apt-get update && sudo apt-get install -y imagemagick
