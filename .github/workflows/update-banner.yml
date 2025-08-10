@@ -1,9 +1,9 @@
-name: Update Canucks Banner (Public Screenshot Debug)
+name: Update Canucks Banner (Public Screenshot Test)
 
 on:
   schedule:
-    - cron: "0 * * * *"
-  workflow_dispatch:
+    - cron: "0 * * * *"  # every hour at minute 0
+  workflow_dispatch:  # manual run
 
 jobs:
   capture-banner:
@@ -13,12 +13,9 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Capture full Canucks screenshot (PagePeeker)
+      - name: Capture full Canucks screenshot (PagePeeker) with debug
         run: |
           curl -v -o banner.png "https://api.pagepeeker.com/v2/thumbs.php?size=m&url=https://www.nhl.com/canucks/"
-
-      - name: Inspect downloaded banner.png
-        run: |
           echo "First 30 lines of banner.png (as text):"
           head -n 30 banner.png || true
           file banner.png
