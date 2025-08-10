@@ -15,8 +15,8 @@ jobs:
 
       - name: Capture Canucks banner
         run: |
-          curl -o banner.png "https://shot.screenshotapi.net/screenshot?token=${{ secrets.SCREENSHOT_API_KEY }}&url=https://www.nhl.com/canucks/&width=1920&height=1080&crop_area=%7B%22x%22%3A0%2C%22y%22%3A0%2C%22width%22%3A1920%2C%22height%22%3A150%7D
-&output=image"
+          curl -o banner.png "https://shot.screenshotapi.net/screenshot?token=${{ secrets.SCREENSHOT_API_KEY }}&url=https://www.nhl.com/canucks/&width=1920&height=1080&crop_area=%7B%22x%22%3A0%2C%22y%22%3A0%2C%22width%22%3A1920%2C%22height%22%3A150%7D&output=image"
+
 
       - name: Commit and push if changed
         run: |
