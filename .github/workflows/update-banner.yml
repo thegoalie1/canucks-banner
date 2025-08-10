@@ -2,8 +2,8 @@ name: Update Canucks Banner
 
 on:
   schedule:
-    - cron: "0 * * * *" # every hour at minute 0
-  workflow_dispatch: # enable manual run
+    - cron: "0 * * * *"  # every hour at minute 0
+  workflow_dispatch:  # enable manual run
 
 jobs:
   capture-banner:
@@ -13,10 +13,17 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Capture Canucks banner
+      - name: Capture full Canucks screenshot
         run: |
-          curl -o banner.png "https://shot.screenshotapi.net/screenshot?token=${{ secrets.SCREENSHOT_API_KEY }}&url=https://www.nhl.com/canucks/&width=1920&height=1080&crop_area=%7B%22x%22%3A0%2C%22y%22%3A0%2C%22width%22%3A1920%2C%22height%22%3A150%7D&output=image"
+          curl -o banner.png "https://shot.screenshotapi.net/screenshot?token=${{ secrets.SCREENSHOT_API_KEY }}&url=https://www.nhl.com/canucks/&width=1920&height=1080&output=image"
 
+      - name: Install ImageMagick
+        run: sudo apt-get update && sudo apt-get install -y imagemagick
+
+      - name: Crop banner locally
+        run: |
+          convert banner.png -crop 1920x150+0+0 cropped-banner.png
+          mv cropped-banner.png banner.png
 
       - name: Commit and push if changed
         run: |
@@ -25,3 +32,4 @@ jobs:
           git add banner.png
           git commit -m "Update banner" || echo "No changes to commit"
           git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/thegoalie1/canucks-banner.git HEAD:main
+
