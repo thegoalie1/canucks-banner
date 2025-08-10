@@ -1,37 +1,35 @@
-name: Update Canucks Banner (Public Screenshot Test)
+name: Update Canucks TSN Schedule Banner
 
 on:
   schedule:
-    - cron: "0 * * * *"  # every hour at minute 0
-  workflow_dispatch:  # manual run
+    - cron: "0 * * * *"  # Runs every hour at minute 0
+  workflow_dispatch:     # Allows manual trigger
 
 jobs:
-  capture-banner:
+  capture-schedule:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Capture full Canucks screenshot (PagePeeker) with debug
+      - name: Capture TSN Canucks schedule screenshot
         run: |
-          curl -v -o banner.png "https://api.pagepeeker.com/v2/thumbs.php?size=m&url=https://www.nhl.com/canucks/"
-          echo "First 30 lines of banner.png (as text):"
-          head -n 30 banner.png || true
+          curl -v -o banner.png "https://shot.screenshotapi.net/screenshot?token=${{ secrets.SCREENSHOT_API_KEY }}&url=https://www.tsn.ca/nhl/team-page/vancouver-canucks/23?activeTab=schedule&width=1920&height=1080&output=image&crop=%7B%22x%22%3A0%2C%22y%22%3A300%2C%22width%22%3A1920%2C%22height%22%3A400%7D"
           file banner.png
+          echo "Downloaded banner.png"
 
-      - name: Install ImageMagick
+      - name: Install ImageMagick (optional, if you want to process image further)
         run: sudo apt-get update && sudo apt-get install -y imagemagick
 
-      - name: Crop banner locally
-        run: |
-          convert banner.png -crop 1920x150+0+0 cropped-banner.png
-          mv cropped-banner.png banner.png
+      # Example extra step: resize image (optional)
+      # - name: Resize banner image
+      #   run: convert banner.png -resize 800x auto banner.png
 
-      - name: Commit and push if changed
+      - name: Commit and push changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add banner.png
-          git commit -m "Update banner with public screenshot" || echo "No changes to commit"
+          git commit -m "Update TSN Canucks schedule banner" || echo "No changes to commit"
           git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/thegoalie1/canucks-banner.git HEAD:main
