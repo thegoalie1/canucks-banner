@@ -16,6 +16,8 @@ jobs:
       - name: Capture full Canucks screenshot with debug
         run: |
           curl -v -o banner.png "https://shot.screenshotapi.net/screenshot?token=${{ secrets.SCREENSHOT_API_KEY }}&url=https://www.nhl.com/canucks/&width=1920&height=1080&output=image"
+          echo "First 30 lines of banner.png (as text):"
+          head -n 30 banner.png || true
           file banner.png
 
       - name: Install ImageMagick
